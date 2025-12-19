@@ -21,4 +21,8 @@ public class ProductByQuantity extends Product{
         return presenceNumber;
     }
 
+    public void setPresenceNumber(int presenceNumber) {
+        this.presenceNumber = presenceNumber;
+    }
+
 }

@@ -15,4 +15,7 @@ public class OrderController {
     }
 
     //TODO: додати метод для додавання одного айтему до ордеру
+    public boolean addItemToOrder(Order order, OrderItem orderItem){
+        return order.addItem(orderItem);
+    }
 }

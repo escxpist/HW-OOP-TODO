@@ -27,7 +27,7 @@ public class OrderItem {
     public OrderItem(Product product, double kilos, ValidateProductQuantity validateProductQuantity) {
         this.product = product;
         this.validateProductQuantity = validateProductQuantity;
-        this.number = number;
+        this.kilos = kilos;
         this.validateProductQuantity.validate(product);
      //   validateProductQuantity.validateKilos(product, kilos);
     }
@@ -73,5 +73,17 @@ public class OrderItem {
                 "product=" + product +
                 ", number=" + number +
                 '}';
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public double getKilos() {
+        return kilos;
     }
 }

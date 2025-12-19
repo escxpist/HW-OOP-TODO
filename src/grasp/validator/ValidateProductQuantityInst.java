@@ -1,5 +1,6 @@
 package grasp.validator;
 
+import grasp.exeption.ItemNotAddedException;
 import grasp.items.Product;
 import grasp.items.ProductByKilos;
 import grasp.items.ProductByQuantity;
@@ -11,11 +12,25 @@ public class ValidateProductQuantityInst implements ValidateProductQuantity{
 
      public boolean validateKilos(Product product, double kilos) {
         //TODO: написати валідацію, що не можна купити більше, ніж є
+         if (product instanceof ProductByKilos) {
+             ProductByKilos kilosProduct = (ProductByKilos) product;
+             if (kilosProduct.getPresentWeight() < kilos) {
+                 throw new ItemNotAddedException("Недостатньо товару. Замовлено(кг): " + kilos +
+                         ", Є в наявності: " + kilosProduct.getPresentWeight());
+             }
+         }
         return true;
     }
 
      public boolean validateNumber(Product product, int number) {
         //TODO: написати валідацію, що не можна купити більше, ніж є
+         if (product instanceof ProductByQuantity) {
+             ProductByQuantity quantityProduct = (ProductByQuantity) product;
+             if (quantityProduct.getPresenceNumber() < number) {
+                 throw new ItemNotAddedException("Недостатньо товару. Замовлено(шт): " + number +
+                         ", Є в наявності: " + quantityProduct.getPresenceNumber());
+             }
+         }
         return true;
     }
 

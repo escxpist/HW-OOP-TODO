@@ -32,20 +32,28 @@ public class Order {
      */
     public boolean addItem(OrderItem orderItem){
         //TODO: оновити кількість товарів після їх додавання до ордеру
+        changeStock(orderItem, false);
         this.orderItems.add(orderItem);
         return true;
     }
 
-    public boolean addItem(Product product, int number){
+    public boolean addItem(Product product, int number) {
         //TODO: оновити кількість товарів після їх додавання до ордеру;
+        OrderItem newItem = new OrderItem(product, number, new ValidateProductQuantityInst());
+        return addItem(newItem);
+    }
         //TODO: розібратись з додаванням товарів на кілограми
-        this.orderItems.add(new OrderItem(product, number, new ValidateProductQuantityInst()));
-        return true;
+    public boolean addItem(Product product, double kilos){
+            OrderItem newItem = new OrderItem(product, kilos, new ValidateProductQuantityInst());
+            return addItem(newItem);
     }
 
     public boolean cancel() {
         //TODO: оновити кількість товарів перед їх вилученням з ордеру
-        this.orderItems = new ArrayList<OrderItem>();
+        for (OrderItem item : orderItems) {
+            changeStock(item, true);
+        }
+        this.orderItems.clear();
         return true;
     }
 
@@ -54,5 +62,32 @@ public class Order {
         return "Order{" +
                 "orderItems=" + orderItems +
                 '}';
+    }
+
+    private void changeStock(OrderItem item, boolean isRestoring) {
+        Product product = item.getProduct();
+
+        if (product instanceof ProductByQuantity) {
+            ProductByQuantity quantityProduct = (ProductByQuantity) product;
+
+            int currentStock = quantityProduct.getPresenceNumber();
+            int amount = item.getNumber();
+
+            if (isRestoring) {
+                quantityProduct.setPresenceNumber(currentStock + amount);
+            } else {
+                quantityProduct.setPresenceNumber(currentStock - amount);
+            }
+        }
+        else if (product instanceof ProductByKilos) {
+            ProductByKilos kilosProduct = (ProductByKilos) product;
+            double currentWeight = kilosProduct.getPresentWeight();
+            double amount = item.getKilos();
+            if (isRestoring) {
+                kilosProduct.setPresentWeight(currentWeight + amount);
+            } else {
+                kilosProduct.setPresentWeight(currentWeight - amount);
+            }
+        }
     }
 }
